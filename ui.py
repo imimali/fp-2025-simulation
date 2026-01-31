@@ -7,6 +7,7 @@ class UI:
 
     def print_menu(self):
         print("1. Add books")
+        print("2. Delete books by year digit")
         print("5. Print all books")
         ...
 
@@ -14,14 +15,34 @@ class UI:
         for book in self.__service.get_all():
             print(book)
 
+    def read_valid_number(self, message):
+        while True:
+            try:
+                return int(input(message))
+            except ValueError:
+                print("Invalid number, try again")
+
+    def read_valid_digit(self, message):
+        while True:
+            try:
+                result = input(message)
+                if not result.isdigit():
+                    raise ValueError
+                return result
+            except ValueError:
+                print("Invalid number, try again")
+
     def add(self):
 
-        b_id = int(input("Enter id: "))
+        b_id = self.read_valid_number("Enter id: ")
         title = input("Enter title: ")
         author = input("Enter author: ")
-        year = int(input("Enter year: "))
+        year = self.read_valid_number("Enter id: ")
         self.__service.add(b_id, title, author, year)
 
+    def delete_by_digit(self):
+        digit = self.read_valid_digit("Enter digit: ")
+        self.__service.delete_books_by_year_digit(digit)
     def run(self):
 
         while True:
@@ -33,3 +54,6 @@ class UI:
 
                 case '1':
                     self.add()
+
+                case '2':
+                    self.delete_by_digit()

@@ -1,5 +1,8 @@
 from book import Book
 
+class RepositoryException(Exception):
+    pass
+
 class Repository:
     def __init__(self,file_path):
         self.__file_path=file_path
@@ -22,6 +25,13 @@ class Repository:
     def add(self, book):
         self.__elements.append(book)
         self.__write_to_file()
+
+    def delete_book(self, book_to_delete):
+        try:
+            self.__elements.remove(book_to_delete)
+            self.__write_to_file()
+        except ValueError:
+            raise RepositoryException("Book not found")
 
 
     def get_all(self):
