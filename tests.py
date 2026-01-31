@@ -130,6 +130,41 @@ class ServiceTests(unittest.TestCase):
         self.service.set_filter("asdfasdf", 1980)
         self.assertEqual(len(self.service.get_all_filtered()), 0)
 
+    def testRecordForUndo(self):
+        self.service.record_for_undo()
+        previous_values = self.service.get_all().copy()
+        self.assertEqual(self.service.get_undo_stack()[0],previous_values)
+        self.service.add(99,"A","B",1111)
+        self.assertEqual(self.service.get_undo_stack()[0], previous_values)
+
+    def testPerformUndo(self):
+        self.service.record_for_undo()
+        previous_values = self.service.get_all().copy()
+        self.service.record_for_undo()
+        self.service.add(99, "A", "B", 1111)
+
+        self.service.perform_undo()
+        self.assertEqual(self.service.get_undo_stack()[0], previous_values)
+
+        self.service.perform_undo()
+        with self.assertRaises(ValueError):
+            self.service.perform_undo()
+
+
+
+
+class SomeTest(unittest.TestCase):
+    def setUp(self):
+        print('setting up')
+    def tearDown(self):
+        print('tearing down')
+
+    def testSomething(self):
+        print('test 1 running')
+
+    def testSomethingElse(self):
+        print('test 2 running')
+
 
 
 

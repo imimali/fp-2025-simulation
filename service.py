@@ -1,5 +1,6 @@
 from repository import Repository
 from book import Book
+from copy import deepcopy
 
 class Service:
 
@@ -7,6 +8,7 @@ class Service:
         self.__repo=repo
         self.__title_filter = ""
         self.__year_filter = -1
+        self.__undo_stack = []
 
     def get_all(self):
         return self.__repo.get_all()
@@ -25,6 +27,7 @@ class Service:
         return result
 
     def delete_books_by_year_digit(self,digit):
+        self.record_for_undo()
         books_by_digit = self.books_by_year_digit(digit)
         for book in books_by_digit:
             self.__repo.delete_book(book)
@@ -43,3 +46,15 @@ class Service:
 
     def get_filters(self):
         return (self.__year_filter,self.__title_filter)
+
+    def record_for_undo(self):
+        self.__undo_stack.append(deepcopy(self.__repo.get_all()))
+
+    def perform_undo(self):
+        if not self.__undo_stack:
+            raise ValueError("Empty undo stack")
+        new_elements = self.__undo_stack.pop()
+        self.__repo.set_all(new_elements)
+
+    def get_undo_stack(self):
+        return self.__undo_stack

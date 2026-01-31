@@ -36,3 +36,7 @@ class Repository:
 
     def get_all(self):
         return self.__elements
+
+    def set_all(self,new_elements):
+        self.__elements=new_elements
+        self.__write_to_file()

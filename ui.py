@@ -9,6 +9,7 @@ class UI:
         print("1. Add books")
         print("2. Delete books by year digit")
         print("3. Set filters")
+        print("4. Undo last deletion")
         print("5. Print all books")
         ...
 
@@ -56,6 +57,12 @@ class UI:
         title_filter = input("Enter title filter: ")
         self.__service.set_filter(title_filter, year_filter)
 
+    def undo(self):
+        try:
+            self.__service.perform_undo()
+        except ValueError:
+            print('Nothing to undo')
+
     def run(self):
 
         while True:
@@ -74,3 +81,6 @@ class UI:
 
                 case '3':
                     self.set_filters()
+
+                case '4':
+                    self.undo()
