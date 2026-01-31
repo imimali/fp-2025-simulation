@@ -114,7 +114,22 @@ class ServiceTests(unittest.TestCase):
         self.service.delete_books_by_year_digit('7')
         self.assertEqual(len(self.service.get_all()),2)
 
-    # def testGetAllFiltered(self):
+    def testGetAllFiltered(self):
+        self.service.set_filter("", 2050)
+        self.assertEqual(len(self.service.get_all_filtered()),2)
+
+        self.service.set_filter("a", 2050)
+        self.assertEqual(len(self.service.get_all_filtered()), 2)
+
+        self.service.set_filter("Satan", 2050)
+        self.assertEqual(len(self.service.get_all_filtered()), 1)
+
+        self.service.set_filter("", 1980)
+        self.assertEqual(len(self.service.get_all_filtered()), 1)
+
+        self.service.set_filter("asdfasdf", 1980)
+        self.assertEqual(len(self.service.get_all_filtered()), 0)
+
 
 
 

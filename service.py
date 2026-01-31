@@ -29,4 +29,17 @@ class Service:
         for book in books_by_digit:
             self.__repo.delete_book(book)
 
+    def get_all_filtered(self):
+        result = []
+        for book in self.get_all():
+            if self.__title_filter in book.get_title() and book.get_year()< self.__year_filter:
+                result.append(book)
 
+        return result
+
+    def set_filter(self,new_title_filter,new_year_filter):
+        self.__year_filter=new_year_filter
+        self.__title_filter=new_title_filter
+
+    def get_filters(self):
+        return (self.__year_filter,self.__title_filter)
